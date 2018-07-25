@@ -1,0 +1,6 @@
+[submodule "forks/gbf#taskwarrior"]
+	path = "forks/gbf#taskwarrior"
+	url = git@github.com:NonLogicalDev/fork.util.taskwarrior.git
+[submodule "forks/gfb#timewarrior"]
+	path = "forks/gfb#timewarrior"
+	url = git@github.com:NonLogicalDev/fork.util.timewarrior.git
