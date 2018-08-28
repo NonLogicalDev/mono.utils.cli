@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import subprocess as sp
 import argparse
 import json
@@ -8,8 +11,13 @@ command_parser = parser.add_subparsers(dest="cmd")
 command_parser.add_parser('list-windows')
 command_parser.add_parser('list-panes')
 command_parser.add_parser('list-sessions')
-
 command_parser.add_parser('reflow-windows')
+
+SHIFT_WINDOWS_CMD = command_parser.add_parser('insert-window')
+
+SHIFT_WINDOWS_CMD_loc_group = SHIFT_WINDOWS_CMD.add_mutually_exclusive_group()
+SHIFT_WINDOWS_CMD_loc_group.add_argument('--before', '-b', type=int)
+SHIFT_WINDOWS_CMD_loc_group.add_argument('--after', '-a', type=int)
 
 class PExec(sp.Popen):
     def wait(self, **kwargs):
@@ -52,6 +60,13 @@ class Tmux():
         Tmux.tmux(['move-window', '-s', str(idx_a), '-t', str(idx_b)])
 
     @staticmethod
+    def cmd_create_window(at_index=None):
+        if at_index is not None:
+            Tmux.tmux(['new-window', '-t', str(at_index)])
+        else:
+            Tmux.tmux(['new-window'])
+
+    @staticmethod
     def cmd_select_window(idx):
         Tmux.tmux(['select-window', '-t', ':%s' % idx])
 
@@ -69,6 +84,17 @@ class Tmux():
         if active_window:
             Tmux.cmd_select_window(active_window)
 
+    @staticmethod
+    def action_insert_window(offest=1, direction='-1'):
+        pass
+
+    @classmethod
+    def action_reindex_windows(cls, fn):
+        cls.cmd_list_windows()
+
+
+
+
 
 def main():
     args = parser.parse_args()
@@ -77,7 +103,7 @@ def main():
         print(json.dumps(Tmux.cmd_list_windows(), indent=4))
 
     elif args.cmd == 'reflow-windows':
-        Tmux.action_reflow_windows()
+        Tmux.insert()
 
 
 if __name__ == '__main__':

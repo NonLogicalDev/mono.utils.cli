@@ -9,4 +9,5 @@ setuptools.setup(
   description="A tool to aid in managing tmux",
   packages=setuptools.find_packages(exclude=['tests']),
   python_requires=PYTHON_REQUIRES,
+  scripts=['src/tmuxctl']
 )
