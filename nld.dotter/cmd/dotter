@@ -57,6 +57,36 @@ def yes_no_prompt(prompt):
         return False
 
 
+class PP(object):
+    HEADER = '\033[95m'
+
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+    ENDC = '\033[0m'
+
+    @classmethod
+    def red(cls, s):
+        print(cls.RED + str(s) + cls.ENDC)
+
+    @classmethod
+    def green(cls, s):
+        print(cls.GREEN + str(s) + cls.ENDC)
+
+    @classmethod
+    def yellow(cls, s):
+        print(cls.YELLOW + str(s) + cls.ENDC)
+
+    @classmethod
+    def blue(cls, s):
+        print(cls.BLUE + str(s) + cls.ENDC)
+
+
 class Commander:
     CMD_METHOD_ARGS=re.compile(r'^_cmd__([\w_]+)__args$')
     CMD_METHOD=re.compile(r'^_cmd__([\w_]+)$')
@@ -463,7 +493,6 @@ class CatConfig():
             self.compiled_ignores.append(fnmatch.translate(ignore_pat))
         #self.compiled_ignores = map(re.compile, self.compiled_ignores)
 
-
         self.compiled_ext_re = re.compile(
             "(.*?)"         # Path name
             "\."            # .
@@ -494,7 +523,7 @@ class SysOps:
         if not os.path.isdir(path):
             self.ensure_folder(os.path.dirname(path))
 
-            log.info("FOLDER: {}".format(path))
+            PP.yellow("FOLDER : {}".format(path))
             if not self.dry_run:
                 try:
                     os.mkdir(path)
@@ -510,12 +539,13 @@ class SysOps:
             force = self.force
         self.ensure_folder(os.path.dirname(dest), force=force)
 
-        if os.path.exists(dest):
-            log.info("TOCH[E]: {} -> {}".format(src, dest))
+        if os.path.exists(dest) or os.path.islink(dest):
+            PP.green("TOCH[E]: {} -> {}".format(src, dest))
             return
 
-        log.info("TOCH: {} -> {} (force:{})".format(src, dest, force))
-        shutil.copy(src, dest)
+        PP.yellow("TOCH   : {} -> {} (force:{})".format(src, dest, force))
+        if not self.dry_run:
+            shutil.copy(src, dest)
 
     def copy(self, src, dest, force=None):
 
@@ -523,30 +553,44 @@ class SysOps:
             force = self.force
         self.ensure_folder(os.path.dirname(dest), force=force)
 
-        if os.path.exists(dest):
-            if self.force and yes_no_prompt("Replace {} with {}?".format(src, dest)):
+        if os.path.exists(dest) or os.path.islink(dest):
+            diff_code = os.popen("diff -q '{}' '{}'".format(src, dest)).close()
+
+            if diff_code is None:
+                PP.green("[E]COPY: {} -> {}".format(src, dest))
+                return
+            elif self.force and yes_no_prompt("Replace {} with {}?".format(src, dest)):
+                PP.red("     RM: {}".format(src, dest))
                 os.remove(dest)
             else:
-                log.info("COPY[E]: {} -> {}".format(src, dest))
+                PP.green("[D]COPY: {} :: {}".format(src, dest))
                 return
 
-        log.info("COPY: {} -> {} (force:{})".format(src, dest, force))
-        shutil.copy(src, dest)
+        PP.yellow("COPY   : {} -> {} (force:{})".format(src, dest, force))
+        if not self.dry_run:
+            shutil.copy(src, dest)
 
     def link(self, src, dest, force=None):
         if force is None:
             force = self.force
         self.ensure_folder(os.path.dirname(dest), force=force)
 
-        if os.path.exists(dest):
-            if self.force and yes_no_prompt("Replace {} with {}?".format(src, dest)):
+        if os.path.exists(dest) or os.path.islink(dest):
+            if os.path.realpath(dest) == os.path.realpath(src):
+                PP.green("[E]LINK: {} -> {}".format(src, dest))
+                return
+            elif self.force and yes_no_prompt("Replace {} with {}?".format(src, dest)):
+                PP.red("     RM: {}".format(src, dest))
                 os.remove(dest)
             else:
-                log.info("LINK[E]: {} -> {}".format(src, dest))
+                PP.blue("[D]LINK: {} :: {}".format(src, dest))
                 return
+        else:
+            print("WFT", dest)
 
-        log.info("LINK: {} -> {} (force:{})".format(src, dest, force))
-        os.symlink(src, dest)
+        PP.yellow("   LINK: {} -> {} (force:{})".format(src, dest, force))
+        if not self.dry_run:
+            os.symlink(src, dest)
 
 
 def main():
