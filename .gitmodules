@@ -4,3 +4,6 @@
 [submodule "forks/gfb#timewarrior"]
 	path = "forks/gbf.timewarrior"
 	url = git@github.com:NonLogicalDev/fork.util.timewarrior.git
+[submodule "nld.git-ext"]
+	path = nld.git-ext
+	url = git@github.com:NonLogicalDev/nld.git-ext.git
