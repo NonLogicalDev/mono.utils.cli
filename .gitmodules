@@ -5,8 +5,8 @@
 	path = gfb.timewarrior
 	url = git@github.com:NonLogicalDev/fork.util.timewarrior.git
 [submodule "nld.git-ext"]
-	path = nld.git-ext
-	url = git@github.com:NonLogicalDev/nld.git-ext.git
+	path = nld.cli.git-ext
+	url = git@github.com:NonLogicalDev/nld.cli.git-ext.git
 [submodule "nld.cli.dotter"]
 	path = nld.cli.dotter
 	url = git@github.com:NonLogicalDev/nld.cli.dotter.git
