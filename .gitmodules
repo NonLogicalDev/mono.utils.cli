@@ -2,7 +2,7 @@
 	path = gbf.taskwarrior
 	url = git@github.com:NonLogicalDev/fork.util.taskwarrior.git
 [submodule "forks/gfb#timewarrior"]
-	path = gfb.timewarrior
+	path = gbf.timewarrior
 	url = git@github.com:NonLogicalDev/fork.util.timewarrior.git
 [submodule "nld.git-ext"]
 	path = nld.cli.git-ext
@@ -10,3 +10,6 @@
 [submodule "nld.cli.dotter"]
 	path = nld.cli.dotter
 	url = git@github.com:NonLogicalDev/nld.cli.dotter.git
+[submodule "nld.cli.fsearch"]
+	path = nld.cli.fsearch
+	url = git@github.com:NonLogicalDev/nld.cli.fsearch.git
