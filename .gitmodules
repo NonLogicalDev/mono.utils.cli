@@ -7,3 +7,6 @@
 [submodule "nld.git-ext"]
 	path = nld.git-ext
 	url = git@github.com:NonLogicalDev/nld.git-ext.git
+[submodule "nld.cli.dotter"]
+	path = nld.cli.dotter
+	url = git@github.com:NonLogicalDev/nld.cli.dotter.git
