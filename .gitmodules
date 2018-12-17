@@ -1,8 +1,8 @@
 [submodule "forks/gbf#taskwarrior"]
-	path = forks/gbf.taskwarrior
+	path = gbf.taskwarrior
 	url = git@github.com:NonLogicalDev/fork.util.taskwarrior.git
 [submodule "forks/gfb#timewarrior"]
-	path = "forks/gbf.timewarrior"
+	path = gfb.timewarrior
 	url = git@github.com:NonLogicalDev/fork.util.timewarrior.git
 [submodule "nld.git-ext"]
 	path = nld.git-ext
